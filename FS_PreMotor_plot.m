@@ -1,11 +1,11 @@
 
-function FS_PreMotor_plot(song,calcium,align,cell);
+function idx = FS_PreMotor_plot(song,calcium,align,cell);
 
 
 ds = 1000;
 fs = 48000/ds;
 
-cfs = 25;
+cfs = 25; % video framerate
 align = align/cfs;
 
 figure(); 
@@ -37,12 +37,15 @@ c=cluster(l,'maxclust',5);
 
 calcium{cell}=(calcium{cell}(bb,:));
 song = song(bb,:);
-ax1 =  subplot(121);
+ax1 =  subplot(211);
 imagesc((1:size(song,2))/fs,[],song); colormap(bone);
-ax2 = subplot(122);
+freezeColors;
+ax2 = subplot(212);
 imagesc((1:size(calcium{cell},2))/cfs,1:size(calcium{cell},1),(calcium{cell}));
+colormap(hot);
 
 
+idx = bb;
 linkaxes([ax1 ax2], 'xy');
 xlim([align-5 align+5]);
 

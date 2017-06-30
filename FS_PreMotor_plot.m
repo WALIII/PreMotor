@@ -32,7 +32,7 @@ figure();
 l = linkage(song(:,round(align*fs):align*fs+2*fs), 'ward', 'correlation');
 
 % subplot(3,1,3)
-c=cluster(l,'maxclust',5);
+c=cluster(l,'maxclust',4);
 [aa,bb]=sort(c);
 
 calcium{cell}=(calcium{cell}(bb,:));

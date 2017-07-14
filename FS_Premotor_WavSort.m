@@ -17,7 +17,7 @@ function [song, song_r, align]= FS_Premotor_WavSort(WAV,TEMPLATE)
 % Initial Params:
 fs = 48000;
 counter = 1;
-cutoff = 6000;
+cutoff = 2250;
 
 for i = 1:size((WAV),2)
 trial = i;
@@ -25,7 +25,7 @@ trial = i;
 % make time vector
 time{i} = (1:size((WAV{i}),1))/fs;
 
-
+warning('off','all')
 [song_start, song_end, score_d] = find_audio(WAV{i}, TEMPLATE, fs, 'match_single', false);
 
 try

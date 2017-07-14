@@ -32,7 +32,7 @@ end
 
 %%%%%%%%%%%%{ If First, Second, or Last }%%%%%%%%%%
 try
-song_start = song_start(end); % If 'last' replace ':' w/ with 'end'
+song_start = song_start(:); % If 'last' replace ':' w/ with 'end'
 catch
     continue
 end

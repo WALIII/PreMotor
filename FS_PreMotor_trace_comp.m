@@ -27,7 +27,7 @@ mn = mean(data)+counter*shift;
 
 
 col = hsv(size(Cal,2));
-h = fill([1:L L:-1:1],[mn-se fliplr(mn+se)],col(iii,:)); alpha(1);
+h = fill([1:L L:-1:1],[mn-se fliplr(mn+se)],col(iii,:)); alpha(0.5);
 plot(mn,'Color',col(iii,:));
 
 

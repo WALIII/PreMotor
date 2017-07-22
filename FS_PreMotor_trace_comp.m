@@ -17,7 +17,9 @@ G = calcium{cell};
 data = tsmovavg(G(:,1:end),'s',4);
 data(:,1:4) = 0;
 
-extend = zeros(size(G,1),(Alp{end}-Alp{iii}));
+[Mb Mb2] =max([Alp{:}]);
+extend = zeros(size(G,1),(Alp{Mb2}-Alp{iii}));
+%extend = zeros(size(G,1),(Alp{end}-Alp{iii}));
 data = horzcat(extend,data);
 
 

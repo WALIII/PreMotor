@@ -29,10 +29,10 @@ xlim([align-2 align+4]);
 
 figure(); 
 
-l = linkage(song(:,round(align*fs):align*fs+1.5*fs), 'ward', 'correlation');
+l = linkage(song(:,round(align*fs):align*fs+3*fs), 'ward', 'correlation');
 
 % subplot(3,1,3)
-c=cluster(l,'maxclust',4);
+c=cluster(l,'maxclust',3);
 [aa,bb]=sort(c);
 
 calcium{cell}=(normr(calcium{cell}(bb,:)));

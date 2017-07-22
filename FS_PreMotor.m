@@ -47,7 +47,7 @@ end
 
 for ii = I2;%1: size(song_start,2)
     score_d;
-    if score_d(ii)>1000000
+    if score_d(ii)>5000
         continue
     else
 
@@ -84,7 +84,8 @@ for ii = I2;%1: size(song_start,2)
 %             
             % Zscore data ( needs to be done after mean subtraction)
              for cell = 1:size(roi_ave.interp_dff,1)
-            %padding
+    
+          %  DATA_D{counter} = bsxfun(@minus, DATA_D{counter}, mean(DATA_D{counter}));
             DATA_D{counter}(cell,:)= zscore(DATA_D{counter}(cell,:));
           %  DATA_D{counter}(cell,:)= (DATA_D{counter}(cell,:) -min(min((DATA_D{counter}(cell,:)))));
             end

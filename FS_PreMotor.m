@@ -36,7 +36,7 @@ song_start = song_start(:); % If 'last' replace ':' w/ with 'end'
 catch
     continue
 end
-I2 = 1:size(song_start,1); % If Not First replace '1' w/ 2
+I2 = 2:size(song_start,1); % If Not First replace '1' w/ 2
 
 if I2 == 0;
     disp(' no songs detected, skipping')

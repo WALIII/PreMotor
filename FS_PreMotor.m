@@ -47,7 +47,7 @@ end
 
 for ii = I2;%1: size(song_start,2)
     score_d;
-    if score_d(ii)>5000
+    if score_d(ii)>10000
         continue
     else
 

@@ -35,7 +35,7 @@ l = linkage(song(:,round(align*fs):align*fs+3*fs), 'ward', 'correlation');
 c=cluster(l,'maxclust',3);
 [aa,bb]=sort(c);
 
-calcium{cell}=(normr(calcium{cell}(bb,:)));
+calcium{cell}=((calcium{cell}(bb,:)));
 song = song(bb,:);
 ax1 =  subplot(211);
 imagesc((1:size(song,2))/fs,[],song); colormap(bone);

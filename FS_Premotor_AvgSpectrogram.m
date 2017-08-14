@@ -6,7 +6,7 @@ function FS_Premotor_AvgSpectrogram(song_r,align,s)
 % s = seconds ( default = 1)
 
 % params
-padding = 0.5 % seconds
+padding = 0.1 % seconds
 
 
 

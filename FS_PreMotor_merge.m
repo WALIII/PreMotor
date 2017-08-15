@@ -6,7 +6,7 @@ function [total] = FS_PreMotor_merge(input)
 
 for i = 1:size(input,2)
 
-load(input{i},'roi_ave','directed','undirected');
+load(input{i},'roi_ave');
 
 
 A = exist('total')

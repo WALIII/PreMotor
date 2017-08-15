@@ -13,16 +13,18 @@ padding = 0.1 % seconds
 %sT = ((align/25)*48000)-padding*48000
 sT = ((align/25)*48000);
 eT = (align/25)*48000+(s*48000)+padding*48000
-
-
-G = song_r(:,:);
-
+G = song_r(:,sT:eT);
 
 
 for i = 1:size(G,1)
 [IMAGE1(:,:,i), F, T]= FS_Spectrogram(G(i,:),48000);
 end
 
+figure();
+C = mean(IMAGE1,3);
+figure();
+imagesc(T,F,log(abs(C)+1e+2));set(gca,'YDir','normal');
+ylim([0 9000]);
 
 figure();
 rr = 5;
@@ -32,15 +34,6 @@ subplot(rr,1,i)
 
 imagesc(flipdim(IMAGE1(:,:,i),1));
 end
-
-
-
-figure();
-C = mean(IMAGE1,3);
-figure();
-imagesc(T,F,log(abs(C)+1e+2));set(gca,'YDir','normal');
-ylim([0 9000]);
-
 
 
 

@@ -17,7 +17,7 @@ function [song, song_r, align]= FS_Premotor_WavSort(WAV,TEMPLATE)
 % Initial Params:
 fs = 48000;
 counter = 1;
-cutoff = 900;
+cutoff = 4200;
 
 for i = 1:size((WAV),2)
 trial = i;
@@ -43,7 +43,7 @@ end
 
 %%%%%%%%%%%%{ If First, Second, or Last }%%%%%%%%%%
 try
-song_start = song_start(end); % If 'last' replace ':' w/ with 'end'
+song_start = song_start(1); % If 'last' replace ':' w/ with 'end'
 catch
     continue
 end

@@ -32,7 +32,7 @@ end
 
 %%%%%%%%%%%%{ If First, Second, or Last }%%%%%%%%%%
 try
-song_start = song_start(end); % If 'last' replace ':' w/ with 'end'
+song_start = song_start(1); % If 'last' replace ':' w/ with 'end'
 catch
     continue
 end
@@ -47,11 +47,8 @@ end
 
 for ii = I2;%1: size(song_start,2)
     score_d;
-<<<<<<< Updated upstream
-    if score_d(ii)>10000
-=======
-    if score_d(ii)>1700
->>>>>>> Stashed changes
+
+    if score_d(ii)>4200
         continue
     else
 

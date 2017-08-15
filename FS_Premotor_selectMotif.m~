@@ -30,12 +30,12 @@ for ii = 1:size(WARPED_audio_d,2)% for all trials
 Syl{i}.audio_data(:,ii) = WARPED_audio_d(rect(1)*48000:(rect(3)+rect(1))*48000,ii);
 
 
-
+% TO DO: is it index 1 or 2? * change (2,:)
 [cw{1} index{1}] = min(abs(WARPED_TIME_d{ii}(1,:)-rect(1)))
 [cw{2} index{2}] = min(abs(WARPED_TIME_d{ii}(1,:)-(rect(3)+rect(1))))
 
-% CV{1} = WARPED_TIME_d{ii}(1,index{1}); % start
-% CV{2} = WARPED_TIME_d{ii}(1,index{2}); % end
+CV{1} = WARPED_TIME_d{ii}(1,index{1}); % start
+CV{2} = WARPED_TIME_d{ii}(1,index{2}); % end
 
 try
 Syl{i}.audio_time{ii} = WARPED_TIME_d{ii}(:,index{1}:index{2}); % send both vectors
@@ -59,17 +59,8 @@ if str== 'y'
 [Gconsensus,F,T] = CY_Get_Consensus(mic_data);
 
 % Break up motif SDI information:
-    for i = 1:x; % for all motifs, 
-        rect = indX{i};
-        % Get index data
-        cvrsn = ??; % conversion from units of T to time
-[cw{1} index{1}] = min(abs(T-rect(1)/cvrsn));
-[cw{2} index{2}] = min(abs(T-(rect(3)+rect(1))/cvrsn));
+    for 
 
-for ii = 1:size(WARPED_audio_d,2)
-Syl{i}.SDI{ii} = Gconsensus{1}(:,index{1}:index{2},ii);
-end
-    end
 
 else
     disp('nope...')

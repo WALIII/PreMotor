@@ -32,7 +32,7 @@ end
 
 %%%%%%%%%%%%{ If First, Second, or Last }%%%%%%%%%%
 try
-song_start = song_start(1); % If 'last' replace ':' w/ with 'end'
+song_start = song_start(:); % If 'last' replace ':' w/ with 'end'
 catch
     continue
 end
@@ -48,7 +48,7 @@ end
 for ii = I2;%1: size(song_start,2)
     score_d;
 
-    if score_d(ii)>4200
+    if score_d(ii)>1800
         continue
     else
 
@@ -78,7 +78,7 @@ for ii = I2;%1: size(song_start,2)
             for cell = 1:size(roi_ave.interp_dff,1)
             DATA_D{counter}(cell,:) =  (roi_ave.interp_raw{cell,trial});
             %padding
-            DATA_D{counter}(cell,1:10)= DATA_D{counter}(cell,11);
+            DATA_D{counter}(cell,1:40)= DATA_D{counter}(cell,41);
             end
             
 %             DATA_D{counter} = bsxfun(@minus, DATA_D{counter}, mean(DATA_D{counter}));
@@ -86,7 +86,7 @@ for ii = I2;%1: size(song_start,2)
             % Zscore data ( needs to be done after mean subtraction)
              for cell = 1:size(roi_ave.interp_dff,1)
     
-           DATA_D{counter} = bsxfun(@minus, DATA_D{counter}, mean(DATA_D{counter}));
+           %DATA_D{counter} = bsxfun(@minus, DATA_D{counter}, mean(DATA_D{counter}));
           DATA_D{counter}(cell,:)= zscore(DATA_D{counter}(cell,:));
           %  DATA_D{counter}(cell,:)= (DATA_D{counter}(cell,:) -min(min((DATA_D{counter}(cell,:)))));
             end

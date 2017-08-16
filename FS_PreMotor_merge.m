@@ -14,7 +14,6 @@ if A<1;
 total.analogIO_dat = roi_ave.analogIO_dat;
 total.analogIO_time = roi_ave.analogIO_time;
 total.interp_time = roi_ave.interp_time;
-total.motif = roi_ave.motif;
 total.interp_dff = roi_ave.interp_dff;
 total.interp_raw = roi_ave.interp_raw;
 total.filename = roi_ave.filename;
@@ -25,7 +24,6 @@ else
 total.analogIO_dat = horzcat(total.analogIO_dat,roi_ave.analogIO_dat);
 total.analogIO_time = horzcat(total.analogIO_time,roi_ave.analogIO_time);
 total.interp_time = horzcat(total.interp_time,roi_ave.interp_time);
-total.motif = horzcat(total.motif,roi_ave.motif);
 total.interp_dff = horzcat(total.interp_dff,roi_ave.interp_dff);
 total.interp_raw = horzcat(total.interp_raw,roi_ave.interp_raw);
 total.filename = horzcat(total.filename,roi_ave.filename);

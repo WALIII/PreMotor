@@ -17,7 +17,7 @@ function [song, song_r, align,Motif_ind]= FS_Premotor_WavSort(WAV,TEMPLATE)
 % Initial Params:
 fs = 48000;
 counter = 1;
-cutoff = 6000;
+cutoff = 8800;
 
 for i = 1:size((WAV),2)
 trial = i;
@@ -77,19 +77,15 @@ if I2 == 0;
     continue
 end
 % reset motif number, based on gaps...
-counter2 = 1;
-NN = [I2 size(sindex,2)+1];
+counter = 0;
+NN = [12 size(sindex,2)]
 for iv = I2
+
 sindex((iv):size(sindex,2)) = 1:(size(sindex,2)-iv+1); % adjust motif index- 
-dindex((iv):size(sindex,2)) = NN(counter2+1)-NN(counter2);
-counter2 = counter2+1;
+dindex((iv):size(sindex,2)) = counter + sindex(iv+1);
+counter = counter+sindex(iv+1);
 end
-
-
-
-
-
-
+counter = 1;
 
 
 for ii = XI2%1: size(song_start,2)

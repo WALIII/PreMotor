@@ -20,7 +20,7 @@ G = song_r(:,:);
 
 
 for i = 1:size(G,1)
-[IMAGE1(:,:,i), F, T]= FS_Spectrogram(G(i,:),48000);
+[IMAGE1(:,:,i), T, F]= FS_Spectrogram(G(i,:),48000);
 end
 
 
@@ -38,7 +38,7 @@ end
 figure();
 C = mean(IMAGE1,3);
 figure();
-imagesc(T,F,log(abs(C)+1e+2));set(gca,'YDir','normal');
+imagesc(T,F,C);set(gca,'YDir','normal');
 ylim([0 9000]);
 
 

@@ -1,11 +1,11 @@
-function [Syl, indX] =  FS_Premotor_selectMotif(WARPED_audio_d,WARPED_TIME_d,indX)
+function [Syl, indX] =  FS_Premotor_selectMotif(WARPED_audio,WARPED_TIME,indX)
 
 % For motif analysis, select motifs, and get sylable data
 
 sp = 0;
 if nargin < 3
 
-[C,F,T,IMAGE1] = FS_Premotor_AvgSpectrogram(WARPED_audio_d',1,0.51);
+[C,F,T,IMAGE1] = FS_Premotor_AvgSpectrogram(WARPED_audio{1}',1,0.51);
 
 prompt = 'How many syllables are there?';
 x = input(prompt)
@@ -26,10 +26,9 @@ indX{i} = rect;
     end
 
 % Cut out sylabe
-for ii = 1:size(WARPED_audio_d,2)% for all trials
-Syl{i}.audio_data(:,ii) = WARPED_audio_d(rect(1)*48000:(rect(3)+rect(1))*48000,ii);
-
-
+for iii = 1:size(WARPED_audio_d,2) % For all motif types
+for ii = 1:size(WARPED_audio_d{iii},2)% for all trials
+Syl{i}.audio_data{iii}(:,ii) = WARPED_audio_d(rect(1)*48000:(rect(3)+rect(1))*48000,ii);
 
 [cw{1} index{1}] = min(abs(WARPED_TIME_d{ii}(1,:)-rect(1)))
 [cw{2} index{2}] = min(abs(WARPED_TIME_d{ii}(1,:)-(rect(3)+rect(1))))
@@ -38,11 +37,12 @@ Syl{i}.audio_data(:,ii) = WARPED_audio_d(rect(1)*48000:(rect(3)+rect(1))*48000,i
 % CV{2} = WARPED_TIME_d{ii}(1,index{2}); % end
 
 try
-Syl{i}.audio_time{ii} = WARPED_TIME_d{ii}(:,index{1}:index{2}); % send both vectors
+Syl{i}.audio_time{iii}{ii} = WARPED_TIME_d{ii}(:,index{1}:index{2}); % send both vectors
 catch
     disp('&')
 end
 
+end
 end
 end
 

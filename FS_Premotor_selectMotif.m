@@ -27,17 +27,28 @@ indX{i} = rect;
 
 % Cut out sylabe
 for iii = 1:size(WARPED_audio,2) % For all motif types
+
+     
 for ii = 1:size(WARPED_audio{iii},2)% for all trials
 Syl{i}.audio_data{iii}(:,ii) = WARPED_audio{iii}(rect(1)*48000:(rect(3)+rect(1))*48000,ii);
-
+  % Calculate difference Vector
+  GG = diff(WARPED_TIME{iii}{ii}(1,:)-WARPED_TIME{iii}{ii}(2,:));
+  nn = 50;
+  DiffVector = tsmovavg(abs(GG),'s',nn);
+  DiffVector(isnan(DiffVector)) = 0;
+  clear GG;
+  
 [cw{1} index{1}] = min(abs(WARPED_TIME{iii}{ii}(1,:)-rect(1)))
 [cw{2} index{2}] = min(abs(WARPED_TIME{iii}{ii}(1,:)-(rect(3)+rect(1))))
 
-% CV{1} = WARPED_TIME_d{ii}(1,index{1}); % start
-% CV{2} = WARPED_TIME_d{ii}(1,index{2}); % end
+
+
+
 
 try
 Syl{i}.audio_time{iii}{ii} = WARPED_TIME{iii}{ii}(:,index{1}:index{2}); % send both vectors
+Syl{i}.audio_dff{iii}(:,ii) = DiffVector(:,index{1}:index{2});
+
 catch
     disp('&')
 end

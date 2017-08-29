@@ -17,7 +17,7 @@ function [song, song_r, align,Motif_ind]= FS_Premotor_WavSort(WAV,TEMPLATE)
 % Initial Params:
 fs = 48000;
 counter = 1;
-cutoff = 6000;
+cutoff = 8900;
 
 for i = 1:size((WAV),2)
 trial = i;

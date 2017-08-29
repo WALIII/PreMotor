@@ -6,7 +6,7 @@ function [sim_score, vector_score, A_diff,S_diff] = FS_PreMotor_FeaturePlot(WARP
 
   % Get Spectral information from adjusted audio
   for i = 1:size(WARPED_audio,2)
-  [sim_score{i}, vector_score{i}] = FS_song_dff(Gconsensus{i})
+  [sim_score{i}, vector_score{i}] = FS_song_dff(Gconsensus{1,i}{1});
   end
 
   % Plot F

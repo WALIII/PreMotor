@@ -4,20 +4,22 @@ function [Cal, Aln, index_split] = FS_Premotor_modelSort(calcium, align, idx)
 
 % manually define the clusters:
 %t1 = 1:7;
-t1 = 1:222;
-t2 = 281:488;
+t1 = 1:13;
+t2 = 14:44;
+t3 = [45:159,184:274];
 index_split{1} = t1;
 index_split{2} = t2;
+index_split{3} = t3;
 
 
 for i = 1:size(calcium,2);
-   Cal{1}{1,i} =  calcium{i}(idx(t2),:);
-   Cal{2}{1,i} =  calcium{i}(idx(t1),:);
-  % Cal{3}{1,i} =  calcium{i}(idx(t3),:);
+for ii = 1:size(index_split,2)
+   Cal{ii}{1,i} =  calcium{i}(idx(index_split{ii}),:);
+   Aln{ii} = align;
 end
-Aln{1} = align;
-Aln{2} = align;
-%Aln{3} = align;
+
+end
+
 
 % check it over:
 figure();

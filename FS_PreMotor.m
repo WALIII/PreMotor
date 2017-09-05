@@ -1,5 +1,5 @@
 
-function [calcium, DATA_D, song_r, song, align] =  FS_PreMotor(roi_ave,TEMPLATE)
+function [calcium, DATA_D, song_r, song, align, Motif_ind] =  FS_PreMotor(roi_ave,TEMPLATE)
 % run on data extracted from base directory, to aligne to the first
 % detected song
 
@@ -102,7 +102,8 @@ for ii = XI2%1: size(song_start,2)
 
             clear g;
             clear g2;
-
+            Motif_ind(1,counter) = sindex(ii);
+            Motif_ind(2,counter) = dindex(ii); % max number of motifs in bout 
 
 
             % create and concat, 2 matrixes

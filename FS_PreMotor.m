@@ -7,7 +7,7 @@ function [calcium, DATA_D, song_r, song, align, Motif_ind] =  FS_PreMotor(roi_av
 % WAL3
 
 warning off
-cutoff = 8500;
+cutoff = 850000;
 counter = 1;
 
 for i = 1:size((roi_ave.analogIO_dat),2)

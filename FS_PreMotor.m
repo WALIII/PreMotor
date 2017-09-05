@@ -7,7 +7,7 @@ function [calcium, DATA_D, song_r, song, align] =  FS_PreMotor(roi_ave,TEMPLATE)
 % WAL3
 
 warning off
-
+cutoff = 8500;
 counter = 1;
 
 for i = 1:size((roi_ave.analogIO_dat),2)
@@ -21,6 +21,20 @@ catch
     score_T = score_d;
 end
 
+%%%%%%%% { Eliminate low scores} %%%%%%%%
+for iii = 1:size(score_d,2);
+score_d;
+    if score_d(iii)>cutoff
+        song_start(iii) = 0;
+        score_d(iii) = 0;
+%         continue
+    else
+
+    end
+end
+song_start( song_start==0 )=[];
+score_d( score_d==0 )=[];
+
 
 %%%%%%%%%%%%{ ALL }%%%%%%%%%%
 % I2 = 1: size(song_start,2)
@@ -32,34 +46,52 @@ end
 
 %%%%%%%%%%%%{ If First, Second, or Last }%%%%%%%%%%
 try
-song_start = song_start(1); % If 'last' replace ':' w/ with 'end'
+song_start2 = song_start(:); % If 'last' replace ':' w/ with 'end'
+sindex = 1:size(song_start,2); %motif number
 catch
     continue
 end
-I2 = 1:size(song_start,1); % If Not First replace '1' w/ 2
+I2 = 1:size(song_start2,1); % If Not First replace '1' w/ 2
+XI2 = I2;
 
+%%%%%%%%%%%%{ OPTIONAL: SONG TIME DIFFERENCES }%%%%%%%%%%
+% Now we can index into numbered motifs ( 1st, second, last, etc)
+% sinindex = the index of the motif
+% I = breaks in motif ( so, the 'last' motif in the run)
+
+X = diff(song_start);
+I = find(X > 2.5);
+I2 = horzcat(1,I+1);
+% end if there are no songs detected....
 if I2 == 0;
     disp(' no songs detected, skipping')
     continue
 end
+% reset motif number, based on gaps...
+counter2 = 1;
+NN = [I2 size(sindex,2)+1];
+for iv = I2
+sindex((iv):size(sindex,2)) = 1:(size(sindex,2)-iv+1); % adjust motif index-
+dindex((iv):size(sindex,2)) = NN(counter2+1)-NN(counter2);
+counter2 = counter2+1;
+end
 
 
 
-for ii = I2;%1: size(song_start,2)
+
+
+for ii = XI2%1: size(song_start,2)
     score_d;
 
-    if score_d(ii)>100000000
 
-        continue
-    else
 
             idx1=song_start(ii); %time in seconds
 
             [~,loc1]= min(abs(roi_ave.interp_time{i}-idx1));
-            
+
             startT{counter} = loc1; % align to this frame
-            
-              
+
+
             g = zftftb_rms(roi_ave.analogIO_dat{i}(idx1*fs:end),48000);
             g2 = zftftb_rms(roi_ave.analogIO_dat{i}(1:idx1*fs),48000);
 
@@ -67,15 +99,15 @@ for ii = I2;%1: size(song_start,2)
             song2{counter} = g2';
             song_r1{counter} = roi_ave.analogIO_dat{i}(idx1*fs:end)';
             song_r2{counter} = roi_ave.analogIO_dat{i}(1:idx1*fs)';
-            
+
             clear g;
             clear g2;
-         
 
-            
+
+
             % create and concat, 2 matrixes
             % start:
-            
+
             for cell = 1:size(roi_ave.interp_dff,1)
             DATA_D{counter}(cell,:) =  (roi_ave.interp_raw{cell,trial});
             %padding
@@ -83,23 +115,23 @@ for ii = I2;%1: size(song_start,2)
             DATA_D{counter}(cell,1:20)= DATA_D{counter}(cell,21);
 
             end
-            
+
 %             DATA_D{counter} = bsxfun(@minus, DATA_D{counter}, mean(DATA_D{counter}));
-%             
+%
             % Zscore data ( needs to be done after mean subtraction)
              for cell = 1:size(roi_ave.interp_dff,1)
-    
+
           DATA_D{counter} = bsxfun(@minus, DATA_D{counter}, mean(DATA_D{counter}));
           DATA_D{counter}(cell,:)= zscore(DATA_D{counter}(cell,:));
           %  DATA_D{counter}(cell,:)= (DATA_D{counter}(cell,:) -min(min((DATA_D{counter}(cell,:)))));
             end
-            
-            
-            
+
+
+
           clear CAL_start;
           clear CAL_end;
           counter = counter+1;
-    end
+
 end
 end
 
@@ -118,7 +150,7 @@ end
 
 
 for cell = 1:size(roi_ave.interp_dff,1);
-    
+
             % MAke matrix END
             % very simple example
 % assumes each entry in a is a row vector
@@ -145,7 +177,7 @@ end
 %concat songs
 
 % for trials = 1:10
-    
+
             % MAke matrix END
             % very simple example
 % assumes each entry in a is a row vector
@@ -198,4 +230,3 @@ end
 % add zeros to padd everything imaging data
 
 %
-

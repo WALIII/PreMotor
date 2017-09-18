@@ -7,7 +7,7 @@ function [calcium, DATA_D, song_r, song, align, Motif_ind] =  FS_PreMotor(roi_av
 % WAL3
 
 warning off
-cutoff = 850000;
+cutoff = 2*10e4;
 counter = 1;
 
 for i = 1:size((roi_ave.analogIO_dat),2)
@@ -60,7 +60,7 @@ XI2 = I2;
 % I = breaks in motif ( so, the 'last' motif in the run)
 
 X = diff(song_start);
-I = find(X > 2.5);
+I = find(X > 1);
 I2 = horzcat(1,I+1);
 % end if there are no songs detected....
 if I2 == 0;
@@ -113,7 +113,7 @@ for ii = XI2%1: size(song_start,2)
             DATA_D{counter}(cell,:) =  (roi_ave.interp_raw{cell,trial});
             %padding
 
-            DATA_D{counter}(cell,1:20)= DATA_D{counter}(cell,21);
+            DATA_D{counter}(cell,1:10)= DATA_D{counter}(cell,11);
 
             end
 

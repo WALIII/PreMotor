@@ -1,9 +1,12 @@
 
-function idx = FS_PreMotor_plot(song,calcium,align,cell,Motif_ind);
+function [idx, calcium, song] = FS_PreMotor_plot(song,calcium,align,cell,Motif_ind);
+
+% Same as FS_PreMotor_Plot, but you can plot/sort based on the Motif number.
 
 warning off
+
 % Remove indexes that don't hold what you want
-indices = find( Motif_ind(1,:) == 2 & Motif_ind(2,:)> 3);
+indices = find( Motif_ind(1,:) ==  Motif_ind(2,:));
 for i = 1:size(calcium,2)
     calcium{i} = calcium{i}(indices,:);
 end
@@ -37,10 +40,10 @@ xlim([align-2 align+4]);
 
 figure();
 
-l = linkage(song(:,round(align*fs):align*fs+1*fs), 'ward', 'correlation');
+l = linkage(song(:,round((align-0.5)*fs):align*fs+1*fs), 'ward', 'correlation');
 
 % subplot(3,1,3)
-c=cluster(l,'maxclust',5);
+c=cluster(l,'maxclust',50);
 [aa,bb]=sort(c);
 
 calcium{cell}=((calcium{cell}(bb,:)));

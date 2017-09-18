@@ -5,10 +5,10 @@ function [sim_score, vector_score, A_diff,S_diff] = FS_PreMotor_FeaturePlot(WARP
 
   % Take mean across all concencus scores
   for i = 1:size(WARPED_audio,2)
-  if i == 1;
-      c_agg_temp = Gconsensus{1,i}{1}
+  if i == 1
+      c_agg_temp = Gconsensus{1,i}{1};
   else
-      c_agg_temp = [c_agg Gconsensus{1,i}{1}]
+      c_agg_temp = [c_agg Gconsensus{1,i}{1};
   end
   end
 

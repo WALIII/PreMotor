@@ -1,4 +1,4 @@
-function [song, song_r, align,Motif_ind]= FS_Premotor_WavSort(WAV,TEMPLATE)
+function [song, song_r, align,Motif_ind]= FS_Premotor_WavSort(WAV,TEMPLATE,cutoff)
 % input wav files, export sorted WAVs for figure one of Context paper
 % Eventually integrate as a subfunction of FS_Premotor.m
 
@@ -13,11 +13,17 @@ function [song, song_r, align,Motif_ind]= FS_Premotor_WavSort(WAV,TEMPLATE)
 
 % WALIII
 % d06.08.17
+% d09/19/17
+
+if nargin < 3
+cutoff = 7300;
+end
 
 % Initial Params:
 fs = 48000;
 counter = 1;
-cutoff = 7300;
+
+
 
 for i = 1:size((WAV),2)
 trial = i;

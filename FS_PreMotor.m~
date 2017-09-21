@@ -1,22 +1,23 @@
 
-function [calcium, DATA_D, song_r, song, align, Motif_ind] =  FS_PreMotor(roi_ave,TEMPLATE,directed,undirected)
+function [calcium, DATA_D, song_r, song, align, Motif_ind] =  FS_PreMotor(roi_ave,TEMPLATE,varargin)
 % run on data extracted from base directory, to aligne to the first
 % detected song
 
 % 05.26.17
 % WAL3
 
-if nargin < 3
-directed = 0;
-undirected = 0;
-DirectedTrials = 0;
-UnDirectedTrials = 1:size(roi_ave.interp_dff,2);
-elseif nargin > 3
-[DirectedTrials, UnDirectedTrials] = Check_Directed(roi_ave, directed,undirected);
+if nargin < 4
+    DU = 0;
+    
+elseif nargin < 5
+   T = 1:size(GG1,2);
 end
 
+
+
+
 warning off
-cutoff = 6800;
+cutoff = 3500;
 counter = 1;
 
 for i = 1:size((roi_ave.analogIO_dat),2)
@@ -113,7 +114,7 @@ for ii = XI2%1: size(song_start,2)
             clear g2;
             Motif_ind(1,counter) = sindex(ii);
             Motif_ind(2,counter) = dindex(ii); % max number of motifs in bout
-            Motif_ind(3,counter)  = ismember(i,DirectedTrials); % 1 if directed, 0 if undirected
+
 
             % create and concat, 2 matrixes
             % start:
@@ -131,9 +132,9 @@ for ii = XI2%1: size(song_start,2)
             % Zscore data ( needs to be done after mean subtraction)
              for cell = 1:size(roi_ave.interp_dff,1)
 
-         DATA_D{counter} = bsxfun(@minus, DATA_D{counter}, mean(DATA_D{counter}));
+        %  DATA_D{counter} = bsxfun(@minus, DATA_D{counter}, mean(DATA_D{counter}));
           DATA_D{counter}(cell,:)= zscore(DATA_D{counter}(cell,:));
-            %DATA_D{counter}(cell,:)= (DATA_D{counter}(cell,:) -min(min((DATA_D{counter}(cell,:)))));
+          %  DATA_D{counter}(cell,:)= (DATA_D{counter}(cell,:) -min(min((DATA_D{counter}(cell,:)))));
             end
 
 

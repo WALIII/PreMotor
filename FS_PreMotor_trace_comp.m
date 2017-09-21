@@ -38,9 +38,10 @@ set(h,'EdgeColor','None');
 
 counter = counter+1;
 end
-line([Alp{end} Alp{end}],[0 counter*shift],'color','r');
-line([Alp{end}+10 Alp{end}+10],[0 counter*shift]);
-line([Alp{end}+30 Alp{end}+30],[0 counter*shift]);
+line([Alp{end}-5 Alp{end}-5],[0 counter*shift],'color','r');
+line([Alp{end} Alp{end}],[0 counter*shift]);
+line([Alp{end}+22 Alp{end}+22],[0 counter*shift]);
+line([Alp{end}+27 Alp{end}+27],[0 counter*shift],'color','r');
 
 % line([6.8*25 6.8*25],[0 counter*shift]);
 % line([7.14*25 7.14*25],[0 counter*shift]);

@@ -1,16 +1,18 @@
-function [sim_score, vector_score, A_diff,S_diff] = FS_PreMotor_FeaturePlot(WARPED_TIME,WARPED_audio,Gconsensus,c_agg)
+function [sim_score, vector_score, A_diff,S_diff, time_score] = FS_PreMotor_FeaturePlot(WARPED_TIME,WARPED_audio,Gconsensus,c_agg)
   % plot traces that correspond to warping locations
   % d050117
   % WAL3
 
-  % Take mean across all concencus scores
-%   for i = 1:size(WARPED_audio,2)
-%   if i == 1
-%       c_agg = Gconsensus{1,i}{1};
-%   else
-%       c_agg = cat(3,c_agg,Gconsensus{1,i}{1});
-%    end
-%    end
+  
+  if nargin < 4
+  %Take mean across all concencus scores
+  for i = 1:size(WARPED_audio,2)
+  if i == 1
+      c_agg = Gconsensus{1,i}{1};
+  else
+      c_agg = cat(3,c_agg,Gconsensus{1,i}{1});
+   end
+   end
 
   % Get Spectral information from adjusted audio
   for i = 1:size(WARPED_audio,2)
@@ -32,6 +34,10 @@ for ii = 1:size(WARPED_TIME,2)
 
   GG = diff(WARPED_TIME{ii}{i}(1,:)-WARPED_TIME{ii}{i}(2,:));
   A_diff{ii}(:,i) = tsmovavg(abs(GG),'s',nn);
+  
+    GG_d = WARPED_TIME{ii}{i}(1,:)-WARPED_TIME{ii}{i}(2,:); %differences in timing
+
+time_score{ii}(:,i) = (sum(abs(GG_d)));
   end
   
 end

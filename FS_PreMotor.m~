@@ -1,23 +1,24 @@
 
-function [calcium, DATA_D, song_r, song, align, Motif_ind] =  FS_PreMotor(roi_ave,TEMPLATE,varargin)
+function [calcium, DATA_D, song_r, song, align, Motif_ind] =  FS_PreMotor(roi_ave,TEMPLATE,directed,undirected)
 % run on data extracted from base directory, to aligne to the first
 % detected song
 
 % 05.26.17
 % WAL3
 
-if nargin < 4
-    DU = 0;
-    
-elseif nargin < 5
-   T = 1:size(GG1,2);
+if nargin < 3
+directed = 0;
+undirected = 0;
+DirectedTrials = 0;
+UnDirectedTrials = 1:size(roi_ave.interp_dff,2);
+elseif nargin > 3
+[DirectedTrials, UnDirectedTrials] = Check_Directed(roi_ave, directed,undirected);
 end
 
-
-
-
 warning off
-cutoff = 3500;
+cutoff = 5000 %LNY39
+%cutoff = 6700;
+ %cutoff = 3500;
 counter = 1;
 
 for i = 1:size((roi_ave.analogIO_dat),2)
@@ -114,8 +115,12 @@ for ii = XI2%1: size(song_start,2)
             clear g2;
             Motif_ind(1,counter) = sindex(ii);
             Motif_ind(2,counter) = dindex(ii); % max number of motifs in bout
-
-
+            Motif_ind(3,counter)  = ismember(i,DirectedTrials); % 1 if directed, 0 if undirected
+           % Get time
+            Dir_time = roi_ave.filename{i}(12:19); formatIn = 'HH MM SS';
+            Motif_ind(4,counter) =  datenum(Dir_time,formatIn)+datenum('00 00 02',formatIn); % time it all went down
+           
+    
             % create and concat, 2 matrixes
             % start:
 
@@ -129,13 +134,47 @@ for ii = XI2%1: size(song_start,2)
 
 %             DATA_D{counter} = bsxfun(@minus, DATA_D{counter}, mean(DATA_D{counter}));
 %
-            % Zscore data ( needs to be done after mean subtraction)
-             for cell = 1:size(roi_ave.interp_dff,1)
+           
+             
 
-        %  DATA_D{counter} = bsxfun(@minus, DATA_D{counter}, mean(DATA_D{counter}));
-          DATA_D{counter}(cell,:)= zscore(DATA_D{counter}(cell,:));
-          %  DATA_D{counter}(cell,:)= (DATA_D{counter}(cell,:) -min(min((DATA_D{counter}(cell,:)))));
-            end
+
+%%%         Detrend
+%          for ixi = 1: size(DATA_D{1},1)
+%           DATA_D2{counter}(ixi,:) = detrend(DATA_D{counter}(ixi,:));
+%          end
+%          
+         % remove any common offsets.
+         % remove mean, *weighted by the variance (mean/variance)
+%          ofst = mean(DATA_D{counter}(:,:))./var(DATA_D{counter}(:,:));
+%          DATA_D{counter} = bsxfun(@minus, DATA_D{counter}, ofst);
+
+%%%         Detrend
+         for ixi = 1: size(DATA_D{1},1)
+          DATA_D{counter}(ixi,:) = (DATA_D{counter}(ixi,:)-prctile(DATA_D{counter}(ixi,:),5))./prctile(DATA_D{counter}(ixi,:),5);
+          DATA_D{counter}(ixi,:) = DATA_D{counter}(ixi,:)*100; % units are % df/f
+         end
+         
+       % Remove common offsets ~ subtract the mean, weighted by the variance (mean/variance)  
+         %ofst = mean(DATA_D{counter}(:,:))./var(DATA_D{counter}(:,:));
+         ofst = smooth(mean(DATA_D{counter}(:,:))./var((DATA_D{counter}(:,:))));
+ %        ofst = smooth(mean(DATA_D{counter}(:,:)));% ./var(diff(DATA_D{counter}(:,:))));
+%
+         DATA_D{counter} = bsxfun(@minus, DATA_D{counter}, ofst');
+         
+        % Detrend the mean offset.
+%            for ixi = 1: size(DATA_D{1},1)
+%            DATA_D2{counter}(ixi,:) = detrend(DATA_D{counter}(ixi,:));
+%            end
+        
+         
+%DATA_D4{counter} = bsxfun(@minus, DATA_D3{counter}, mean(DATA_D3{counter}));
+
+          
+         % Zscore data ( needs to be done after mean subtraction)
+            %  for cell = 1:size(roi_ave.interp_dff,1)
+            %        DATA_D{counter}(cell,:)= zscore(DATA_D{counter}(cell,:));
+            %        % DATA_D{counter}(cell,:)= (DATA_D{counter}(cell,:) -min(min((DATA_D{counter}(cell,:)))));
+            % end
 
 
 
@@ -153,7 +192,7 @@ for cell = 1:size(roi_ave.interp_dff,1)
 for  trial = 1:size(DATA_D,2);
 
             CAL_start{cell}{trial} = DATA_D{trial}(cell,1:startT{trial} );
-            CAL_end{cell}{trial} = DATA_D{trial}(cell,startT{trial}:end);
+            CAL_end{cell}{trial} = DATA_D{trial}(cell,(startT{trial})+1:end); % add +1 or it will have the same value twice...
 end
 end
 

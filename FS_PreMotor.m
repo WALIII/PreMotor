@@ -16,7 +16,9 @@ elseif nargin > 3
 end
 
 warning off
-cutoff = 6800;
+cutoff = 5000 %LNY39
+%cutoff = 6700;
+ %cutoff = 3500;
 counter = 1;
 
 for i = 1:size((roi_ave.analogIO_dat),2)
@@ -114,7 +116,11 @@ for ii = XI2%1: size(song_start,2)
             Motif_ind(1,counter) = sindex(ii);
             Motif_ind(2,counter) = dindex(ii); % max number of motifs in bout
             Motif_ind(3,counter)  = ismember(i,DirectedTrials); % 1 if directed, 0 if undirected
-
+           % Get time
+            Dir_time = roi_ave.filename{i}(12:19); formatIn = 'HH MM SS';
+            Motif_ind(4,counter) =  datenum(Dir_time,formatIn)+datenum('00 00 02',formatIn); % time it all went down
+           
+    
             % create and concat, 2 matrixes
             % start:
 
@@ -122,19 +128,57 @@ for ii = XI2%1: size(song_start,2)
             DATA_D{counter}(cell,:) =  (roi_ave.interp_raw{cell,trial});
             %padding
 
-            DATA_D{counter}(cell,1:10)= DATA_D{counter}(cell,11);
+            DATA_D{counter}(cell,1:6)= DATA_D{counter}(cell,7);
 
             end
 
 %             DATA_D{counter} = bsxfun(@minus, DATA_D{counter}, mean(DATA_D{counter}));
 %
-            % Zscore data ( needs to be done after mean subtraction)
-             for cell = 1:size(roi_ave.interp_dff,1)
+           
+             
 
-      %   DATA_D{counter} = bsxfun(@minus, DATA_D{counter}, mean(DATA_D{counter}));
-          DATA_D{counter}(cell,:)= zscore(DATA_D{counter}(cell,:));
-            %DATA_D{counter}(cell,:)= (DATA_D{counter}(cell,:) -min(min((DATA_D{counter}(cell,:)))));
-            end
+
+%%%         Detrend
+%          for ixi = 1: size(DATA_D{1},1)
+%           DATA_D2{counter}(ixi,:) = detrend(DATA_D{counter}(ixi,:));
+%          end
+%          
+         % remove any common offsets.
+         % remove mean, *weighted by the variance (mean/variance)
+%          ofst = mean(DATA_D{counter}(:,:))./var(DATA_D{counter}(:,:));
+%          DATA_D{counter} = bsxfun(@minus, DATA_D{counter}, ofst);
+
+
+         for ixi = 1: size(DATA_D{1},1)
+          DATA_D{counter}(ixi,:) = (DATA_D{counter}(ixi,:)-prctile(DATA_D{counter}(ixi,:),5))./prctile(DATA_D{counter}(ixi,:),5);
+          DATA_D{counter}(ixi,:) = DATA_D{counter}(ixi,:)*100; % units are % df/f
+         end
+%          ofst = smooth(mean(DATA_D{counter}(:,:)));% ./var(diff(DATA_D{counter}(:,:))));
+% %
+%          DATA_D{counter} = bsxfun(@minus, DATA_D{counter}, ofst');
+%%%         Detrend
+         
+       % Remove common offsets ~ subtract the mean, weighted by the variance (mean/variance)  
+         %ofst = mean(DATA_D{counter}(:,:))./var(DATA_D{counter}(:,:));
+        % ofst = smooth(mean(DATA_D{counter}(:,:))./var((DATA_D{counter}(:,:))));
+%         ofst = smooth(mean(DATA_D{counter}(:,:)));% ./var(diff(DATA_D{counter}(:,:))));
+% %
+%          DATA_D{counter} = bsxfun(@minus, DATA_D{counter}, ofst');
+         
+        % Detrend the mean offset.
+%            for ixi = 1: size(DATA_D{1},1)
+%            DATA_D2{counter}(ixi,:) = detrend(DATA_D{counter}(ixi,:));
+%            end
+        
+         
+%DATA_D4{counter} = bsxfun(@minus, DATA_D3{counter}, mean(DATA_D3{counter}));
+
+          
+         % Zscore data ( needs to be done after mean subtraction)
+            %  for cell = 1:size(roi_ave.interp_dff,1)
+            %        DATA_D{counter}(cell,:)= zscore(DATA_D{counter}(cell,:));
+            %        % DATA_D{counter}(cell,:)= (DATA_D{counter}(cell,:) -min(min((DATA_D{counter}(cell,:)))));
+            % end
 
 
 
@@ -152,7 +196,7 @@ for cell = 1:size(roi_ave.interp_dff,1)
 for  trial = 1:size(DATA_D,2);
 
             CAL_start{cell}{trial} = DATA_D{trial}(cell,1:startT{trial} );
-            CAL_end{cell}{trial} = DATA_D{trial}(cell,startT{trial}:end);
+            CAL_end{cell}{trial} = DATA_D{trial}(cell,(startT{trial})+1:end); % add +1 or it will have the same value twice...
 end
 end
 

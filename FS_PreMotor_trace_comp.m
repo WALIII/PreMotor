@@ -16,6 +16,7 @@ G = calcium{cell};
 
 data = tsmovavg(G(:,1:end),'s',4);
 data(:,1:4) = 0;
+% data = zscore(data');
 
 [Mb Mb2] =max([Alp{:}]);
 extend = zeros(size(G,1),(Alp{Mb2}-Alp{iii}));

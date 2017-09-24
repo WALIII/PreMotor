@@ -15,6 +15,12 @@ function [out] = FS_PreMotor_Neuropil(ROI)
   end
   end
 
+  % Diagnostics
+  XA = ROI.reference_image;
+  XA(sub2ind( size(XA), X2(:,1), X2(:,2))) = NaN;
+  figure();
+  imagesc(XA);
+
 % Run in mat directory
   mov_listing=dir(fullfile(pwd,'*.mat'));
   mov_listing={mov_listing(:).name};
@@ -39,9 +45,3 @@ clear out_mov;
 clear video;
 
 end
-
-% % Diagnostics
-% XA = ROI.reference_image;
-% XA(sub2ind( size(XA), X2(:,1), X2(:,2))) = NaN;
-% figure();
-% imagesc(XA);

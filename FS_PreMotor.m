@@ -126,9 +126,17 @@ for ii = XI2%1: size(song_start,2)
 
             for cell = 1:size(roi_ave.interp_dff,1)
             DATA_D{counter}(cell,:) =  (roi_ave.interp_raw{cell,trial});
-            %padding
-
-            DATA_D{counter}(cell,1:6)= DATA_D{counter}(cell,7);
+%padding, check for when LED turns on, and replace these!
+if cell == 1; for ivi = flip(1:30); % only on the first cell for each trial
+    if mean(DATA_D{counter}(cell,ivi))- mean(DATA_D{counter}(cell,ivi-1)) < 10
+        continue
+    else
+        chk = ivi;
+        break;
+end; end; end;
+        
+    
+            DATA_D{counter}(cell,1:chk)= DATA_D{counter}(cell,chk+1);
 
             end
 

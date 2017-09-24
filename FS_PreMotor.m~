@@ -126,9 +126,16 @@ for ii = XI2%1: size(song_start,2)
 
             for cell = 1:size(roi_ave.interp_dff,1)
             DATA_D{counter}(cell,:) =  (roi_ave.interp_raw{cell,trial});
-            %padding
-
-            DATA_D{counter}(cell,1:10)= DATA_D{counter}(cell,11);
+            %padding, check for when LED turns on
+if cell == 1; for ivi = flip(1:30); % only on the first cell for each trial
+    if mean(DATA_D{counter}(cell,chk))- mean(DATA_D{counter}(cell,chk-1)) < 10
+        continue
+    else
+        chk = ivi;
+end; end; end;
+        
+    
+            DATA_D{counter}(cell,1:chk)= DATA_D{counter}(cell,chk+1);
 
             end
 
@@ -148,18 +155,22 @@ for ii = XI2%1: size(song_start,2)
 %          ofst = mean(DATA_D{counter}(:,:))./var(DATA_D{counter}(:,:));
 %          DATA_D{counter} = bsxfun(@minus, DATA_D{counter}, ofst);
 
-%%%         Detrend
+
          for ixi = 1: size(DATA_D{1},1)
           DATA_D{counter}(ixi,:) = (DATA_D{counter}(ixi,:)-prctile(DATA_D{counter}(ixi,:),5))./prctile(DATA_D{counter}(ixi,:),5);
           DATA_D{counter}(ixi,:) = DATA_D{counter}(ixi,:)*100; % units are % df/f
          end
+%          ofst = smooth(mean(DATA_D{counter}(:,:)));% ./var(diff(DATA_D{counter}(:,:))));
+% %
+%          DATA_D{counter} = bsxfun(@minus, DATA_D{counter}, ofst');
+%%%         Detrend
          
        % Remove common offsets ~ subtract the mean, weighted by the variance (mean/variance)  
          %ofst = mean(DATA_D{counter}(:,:))./var(DATA_D{counter}(:,:));
-         ofst = smooth(mean(DATA_D{counter}(:,:))./var((DATA_D{counter}(:,:))));
- %        ofst = smooth(mean(DATA_D{counter}(:,:)));% ./var(diff(DATA_D{counter}(:,:))));
-%
-         DATA_D{counter} = bsxfun(@minus, DATA_D{counter}, ofst');
+        % ofst = smooth(mean(DATA_D{counter}(:,:))./var((DATA_D{counter}(:,:))));
+%         ofst = smooth(mean(DATA_D{counter}(:,:)));% ./var(diff(DATA_D{counter}(:,:))));
+% %
+%          DATA_D{counter} = bsxfun(@minus, DATA_D{counter}, ofst');
          
         % Detrend the mean offset.
 %            for ixi = 1: size(DATA_D{1},1)

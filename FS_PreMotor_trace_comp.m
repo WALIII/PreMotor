@@ -5,7 +5,7 @@ figure();
 hold on;
 for iii = 1:size(Cal,2);
 counter = 1;
-shift = 5;
+shift = 10;
 
 calcium = Cal{iii};
 

@@ -1,9 +1,10 @@
 
-function [calcium, DATA_D, song_r, song, align, Motif_ind] =  FS_PreMotor(roi_ave,TEMPLATE,directed,undirected)
+function [calcium, DATA_D, song_r, song, align, Motif_ind, BGD] =  FS_PreMotor(roi_ave,TEMPLATE,directed,undirected)
 % run on data extracted from base directory, to aligne to the first
 % detected song
 
 % 05.26.17
+% 09.24.17
 % WAL3
 
 if nargin < 3
@@ -16,9 +17,11 @@ elseif nargin > 3
 end
 
 warning off
-cutoff = 5000 %LNY39
-%cutoff = 6700;
+%cutoff = 5000; %LNY39
+cutoff = 6700;% lr28
  %cutoff = 3500;
+% cutoff = 3000; %LYY
+%cutoff = 4000; %LR33
 counter = 1;
 
 for i = 1:size((roi_ave.analogIO_dat),2)
@@ -125,17 +128,34 @@ for ii = XI2%1: size(song_start,2)
             % start:
 
             for cell = 1:size(roi_ave.interp_dff,1)
+                % OPTIONAL add back in the neuropil
+                try
+            BGD.Npil{counter} = roi_ave.Npil{trial};
+            BGD.Bgnd{counter} = roi_ave.Bgnd{trial};
+            BGD.index{counter} = Motif_ind(3,counter);
+            
+            DATA_D{counter}(cell,:) =  (roi_ave.interp_raw{cell,trial}) -roi_ave.Npil{trial}+ (roi_ave.Npil{trial}(30));
+                catch
+                    if trial ==1;
+                  disp('Warning: Not correcting for neuropil')
+                    end
+            BGD.Bgnd{counter} = 0;   
             DATA_D{counter}(cell,:) =  (roi_ave.interp_raw{cell,trial});
-%padding, check for when LED turns on, and replace these!
-if cell == 1; for ivi = flip(1:30); % only on the first cell for each trial
-    if mean(DATA_D{counter}(cell,ivi))- mean(DATA_D{counter}(cell,ivi-1)) < 10
-        continue
-    else
-        chk = ivi;
-        break;
-end; end; end;
+                end
+                
+
+% padding, check for when LED turns on, and replace these!
+iii;
+    if cell == 1; for ivi = flip(2:30); % only on the first cell for each trial
+           
+         if abs(mean(DATA_D{counter}(cell,ivi))- mean(DATA_D{counter}(cell,ivi-1))) < 10
+          continue
+          if ivi ==2; chk = ivi; break; end; % in case LED was allways on;
+        else
+         chk = ivi;
+            break;
+    end; end; end;
         
-    
             DATA_D{counter}(cell,1:chk)= DATA_D{counter}(cell,chk+1);
 
             end
@@ -153,12 +173,12 @@ end; end; end;
 %          
          % remove any common offsets.
          % remove mean, *weighted by the variance (mean/variance)
-%          ofst = mean(DATA_D{counter}(:,:))./var(DATA_D{counter}(:,:));
+%          ofst = mean(DATA_D{counter}(:,:))%./var(DATA_D{counter}(:,:));
 %          DATA_D{counter} = bsxfun(@minus, DATA_D{counter}, ofst);
 
 
          for ixi = 1: size(DATA_D{1},1)
-          DATA_D{counter}(ixi,:) = (DATA_D{counter}(ixi,:)-prctile(DATA_D{counter}(ixi,:),5))./prctile(DATA_D{counter}(ixi,:),5);
+          DATA_D{counter}(ixi,:) = (DATA_D{counter}(ixi,:)-prctile(DATA_D{counter}(ixi,20:end),5))./prctile(DATA_D{counter}(ixi,20:end),5);
           DATA_D{counter}(ixi,:) = DATA_D{counter}(ixi,:)*100; % units are % df/f
          end
 %          ofst = smooth(mean(DATA_D{counter}(:,:)));% ./var(diff(DATA_D{counter}(:,:))));

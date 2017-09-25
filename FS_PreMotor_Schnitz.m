@@ -4,8 +4,8 @@ function [indX,B,C,data] = FS_PreMotor_Schnitz(calcium, align, Motif_ind);
 % MAke matrixes
 triala = 1;
 trialb = 1;
-Smh = 2;
-range = align-Smh:align+50;
+Smh = 6;
+range = align-10-Smh:align+30;
 
 disp('Formatting data')
 for cell = 1:size(calcium,2);
@@ -39,12 +39,12 @@ clear G;
 clear G2
 for i = 1:Cel;
     G(i,:) = (zscore(mean(data.directed(:,:,i),1)));
-    G_std(i,:) = ((var(data.directed(:,:,i),[],1)));
+    G_std(i,:) = ((std(data.directed(:,:,i),[],1)));
 end
 
 for i = 1:Cel;
     G2(i,:) = (zscore(mean(data.undirected(:,:,i),1)));
-    G2_std(i,:) = ((var(data.undirected(:,:,i),[],1)));
+    G2_std(i,:) = ((std(data.undirected(:,:,i),[],1)));
 end
 
 
@@ -82,7 +82,7 @@ xlabel('Frames');
  figure();
 
 subplot(1,2,1)
-imagesc((B_2) );
+imagesc((B_2), [1 3] );
 title('Directed Trials');
 ylabel('ROIs');
 xlabel('Frames');
@@ -90,7 +90,7 @@ hold on;
 subplot(1,2,2)
 
 
-imagesc((C_2) );
+imagesc((C_2),[1 3] );
 
 title('UnDirected Trials');
 ylabel('ROIs');

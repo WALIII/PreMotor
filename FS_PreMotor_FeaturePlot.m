@@ -1,4 +1,4 @@
-function [sim_score, vector_score, A_diff,S_diff, time_score] = FS_PreMotor_FeaturePlot(WARPED_TIME,WARPED_audio,Gconsensus,c_agg)
+function [sim_score, vector_score, A_diff,S_diff, time_score] = FS_PreMotor_FeaturePlot(WARPED_TIME,WARPED_audio,Gconsensus,vargin)
   % plot traces that correspond to warping locations
   % d050117
   % WAL3

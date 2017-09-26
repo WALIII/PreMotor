@@ -175,21 +175,22 @@ imagesc(cov(squeeze(std(data.undirected,[],1)))); colorbar
 y = [0 9];
 line(x,y,'Color','red','LineStyle','--')
 
+Tx = (var(data.all(:,:,:),[], 1));
 
-    X = (std(data.directed(:,:,:),[], 1));
-    X2 = squeeze(sum(X,2));
+    X = (var(data.directed(:,:,:),[], 1));
+    X2 = ((squeeze(mean(X,2))-squeeze(mean(Tx)))./squeeze(mean(Tx)))1;
     DCb = X2;
     
-    X = (std(data.undirected(:,:,:),[], 1));
-    X2 = squeeze(sum(X,2));
+    X = (var(data.undirected(:,:,:),[], 1));
+    X2 = (squeeze(mean(X,2))-squeeze(mean(Tx)))./squeeze(mean(Tx));
     UCb = X2;
     
     figure();
     title('Variance')
     hold on;
     scatter(UCb,DCb);
-   x = [0 9];
-y = [0 9];
+   x = [-0.5 0.5];
+y = [-0.5 0.5];
 line(x,y,'Color','red','LineStyle','--')
 
 Ta = cat(1,UCa,DCa);
@@ -201,8 +202,8 @@ Tb = cat(1,UCb,DCb);
 %     scatter((UCa)/max(Ta),(DCb)/max(Tb),'r');
 %     scatter((UCb)/max(Tb),(DCa)/max(Ta),'b');
     
-    scatter((UCa)/max(Ta),(DCb)/max(Tb),'r');
-    scatter((UCa)/max(Ta),(DCa)/max(Ta),'b');
+    scatter((DCa)/max(Ta),(DCb)/max(Tb),'g');
+    scatter((UCa)/max(Ta),(UCb)/max(Tb),'m');
    x = [0 1];
 y = [0 1];
 line(x,y,'Color','red','LineStyle','--')

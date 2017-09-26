@@ -175,22 +175,21 @@ imagesc(cov(squeeze(std(data.undirected,[],1)))); colorbar
 y = [0 9];
 line(x,y,'Color','red','LineStyle','--')
 
-Tx = (var(data.all(:,:,:),[], 1));
-
-    X = (var(data.directed(:,:,:),[], 1));
-    X2 = (squeeze(mean(X,2))-squeeze(mean(Tx)))/squeeze(mean(Tx));
+   Tx = (std(data.all(:,:,:),[], 1));
+    X =  (std(data.directed(:,:,:),[], 1));
+    X2 = ((squeeze(mean(X,2))-squeeze(mean(Tx))))-mean((squeeze(mean(X,2))-squeeze(mean(Tx))))
     DCb = X2;
     
-    X = (var(data.undirected(:,:,:),[], 1));
-    X2 = (squeeze(mean(X,2))-squeeze(mean(Tx)))/squeeze(mean(Tx));
+    X = (std(data.undirected(:,:,:),[], 1));
+    X2 = (squeeze(mean(X,2))-squeeze(mean(Tx)))-mean((squeeze(mean(X,2))-squeeze(mean(Tx))))
     UCb = X2;
     
     figure();
     title('Variance')
     hold on;
     scatter(UCb,DCb);
-   x = [-0.5 0.5];
-y = [-0.5 0.5];
+ x = [-0.2 0.2];
+ y = [-0.2 0.2];
 line(x,y,'Color','red','LineStyle','--')
 
 Ta = cat(1,UCa,DCa);

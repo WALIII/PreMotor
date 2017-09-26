@@ -102,10 +102,10 @@ clear range;
 for trial = 1:size(Cal{1,group}{1,1},1)
 range = (1:TX)+TX*(trial-1);
 
-x1a{group}(trial,:) = G_final{group}(range,4);
-y1a{group}(trial,:) = G_final{group}(range,5);
-z1a{group}(trial,:) = G_final{group}(range,6);
-w1a{group}(trial,:) = G_final{group}(range,7);
+x1a{group}(trial,:) = G_final{group}(range,1);
+y1a{group}(trial,:) = G_final{group}(range,2);
+z1a{group}(trial,:) = G_final{group}(range,3);
+w1a{group}(trial,:) = G_final{group}(range,4);
 
 hold on;
 
@@ -122,13 +122,10 @@ end
 end
 
 figure();
-hold on;
-G{1} = zscore(x1a{1}');
-G{2} = zscore(y1a{1}');
-G{3} = zscore(z1a{1}');
-G{4} = zscore(x1a{2}');
-G{5} = zscore(y1a{2}');
-G{6} = zscore(z1a{2}');
+hol
+G{1} = x1a{1}';
+G{2} = y1a{1}';
+G{3} = x1a{1}';
 scrapPlot(G);
 
 Siz = (1:size(AlignBound,2))/25;

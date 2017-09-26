@@ -18,9 +18,9 @@ end
 
 warning off
 %cutoff = 5000; %LNY39
-%cutoff = 6700;% lr28
+cutoff = 6700;% lr28
  %cutoff = 3500;
- cutoff = 3000; %LYY
+% cutoff = 3000; %LYY
 %cutoff = 4000; %LR33
 counter = 1;
 
@@ -159,6 +159,18 @@ iii;
             DATA_D{counter}(cell,1:chk)= DATA_D{counter}(cell,chk+1);
 
             end
+            
+            % Add in neuropil and background
+            try
+            DATA_D{counter}(cell+1,:) =   roi_ave.Npil{trial};
+            DATA_D{counter}(cell+2,:) =   roi_ave.Bgnd{trial};
+            DATA_D{counter}(cell+1,1:chk) = DATA_D{counter}(cell+1,chk+1);
+            DATA_D{counter}(cell+2,1:chk) = DATA_D{counter}(cell+2,chk+1);
+            catch
+                disp('no npil!')
+            end
+            
+
 
 %             DATA_D{counter} = bsxfun(@minus, DATA_D{counter}, mean(DATA_D{counter}));
 %
@@ -220,7 +232,7 @@ end
 disp('catch');
 
 
-for cell = 1:size(roi_ave.interp_dff,1)
+for cell = 1:size(DATA_D{1},1)%1:size(roi_ave.interp_dff,1)
 for  trial = 1:size(DATA_D,2);
 
             CAL_start{cell}{trial} = DATA_D{trial}(cell,1:startT{trial} );
@@ -231,7 +243,7 @@ end
 
 
 
-for cell = 1:size(roi_ave.interp_dff,1);
+for cell = 1:1:size(DATA_D{1},1)%size(roi_ave.interp_dff,1);
 
             % MAke matrix END
             % very simple example

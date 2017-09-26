@@ -17,9 +17,11 @@ elseif nargin > 3
 end
 
 warning off
-cutoff = 5000; %LNY39
-%cutoff = 6700;
+%cutoff = 5000; %LNY39
+cutoff = 6700;% lr28
  %cutoff = 3500;
+% cutoff = 3000; %LYY
+%cutoff = 4000; %LR33
 counter = 1;
 
 for i = 1:size((roi_ave.analogIO_dat),2)
@@ -32,6 +34,16 @@ score_T = [score_d score_T];
 catch
     score_T = score_d;
 end
+
+figure(); histogram(score_T,20);
+x = [cutoff cutoff];
+y = [0 100];
+line(x,y,'Color','red','LineStyle','--')
+
+prompt = 'What should the cuttoff be? Y/N [Y]: ';
+str = input(prompt,'s');
+
+if str == 'y'
 
 %%%%%%%% { Eliminate low scores} %%%%%%%%
 for iii = 1:size(score_d,2);
@@ -143,12 +155,12 @@ for ii = XI2%1: size(song_start,2)
                 
 
 % padding, check for when LED turns on, and replace these!
-iii
+iii;
     if cell == 1; for ivi = flip(2:30); % only on the first cell for each trial
            
          if abs(mean(DATA_D{counter}(cell,ivi))- mean(DATA_D{counter}(cell,ivi-1))) < 10
           continue
-          if ivi ==2
+          if ivi ==2; chk = ivi; break; end; % in case LED was allways on;
         else
          chk = ivi;
             break;
@@ -157,6 +169,18 @@ iii
             DATA_D{counter}(cell,1:chk)= DATA_D{counter}(cell,chk+1);
 
             end
+            
+            % Add in neuropil and background
+            try
+            DATA_D{counter}(cell+1,:) =   roi_ave.Npil{trial};
+            DATA_D{counter}(cell+2,:) =   roi_ave.Bgnd{trial};
+            DATA_D{counter}(cell+1,1:chk) = DATA_D{counter}(cell+1,chk+1);
+            DATA_D{counter}(cell+2,1:chk) = DATA_D{counter}(cell+2,chk+1);
+            catch
+                disp('no npil!')
+            end
+            
+
 
 %             DATA_D{counter} = bsxfun(@minus, DATA_D{counter}, mean(DATA_D{counter}));
 %
@@ -218,7 +242,7 @@ end
 disp('catch');
 
 
-for cell = 1:size(roi_ave.interp_dff,1)
+for cell = 1:size(DATA_D{1},1)%1:size(roi_ave.interp_dff,1)
 for  trial = 1:size(DATA_D,2);
 
             CAL_start{cell}{trial} = DATA_D{trial}(cell,1:startT{trial} );
@@ -229,7 +253,7 @@ end
 
 
 
-for cell = 1:size(roi_ave.interp_dff,1);
+for cell = 1:1:size(DATA_D{1},1)%size(roi_ave.interp_dff,1);
 
             % MAke matrix END
             % very simple example
@@ -297,7 +321,6 @@ for n = 1:size(song,1)
 end
 clear song;
 song = song_all;
-figure(); histogram(score_T,20);
 
 end
 % end

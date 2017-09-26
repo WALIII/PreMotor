@@ -6,12 +6,12 @@ A{1};
 AlignBound = 150:200;%Alignment Boundries ((Aln{1}-20):(Aln{1}+80))
 
 
-for group = 1:3;%1:size(Cal,2) % Each 'Group' is a subset of aligned data
+for group = 1:2;%1:size(Cal,2) % Each 'Group' is a subset of aligned data
     clear CaSignal;
     clear GG
    
 
-for trial = 1:6;%size(Cal{1,group}{1,1},1)
+for trial = 1:size(Cal{1,group}{1,1},1)
 for cell = 1:size(Cal{1,group},2)
 CaSignal(trial,:,cell) = tsmovavg(Cal{1,group}{1,cell}(trial,:),'s',2);
 

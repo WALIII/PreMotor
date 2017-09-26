@@ -1,4 +1,4 @@
-function [varout] = FS_variability(calcium, align,Motif_ind)
+function [data iu] = FS_variability(calcium, align,Motif_ind)
 
 % Get var score: mean( abs [zscore(trace)-zscore(mean)]/zscore(mean);
 
@@ -185,15 +185,19 @@ line(x,y,'Color','red','LineStyle','--')
     UCb = X2;
     
     figure();
-    title('Variance')
+    title('Variance Difference')
     hold on;
     scatter(UCb,DCb);
  x = [-0.2 0.2];
  y = [-0.2 0.2];
 line(x,y,'Color','red','LineStyle','--')
 
+figure();
+
 Ta = cat(1,UCa,DCa);
 Tb = cat(1,UCb,DCb);
+
+
 
     figure();
     title('comparison')
@@ -203,9 +207,18 @@ Tb = cat(1,UCb,DCb);
     
     scatter((DCa)/max(Ta),(DCb)/max(Tb),'g');
     scatter((UCa)/max(Ta),(UCb)/max(Tb),'m');
-   x = [0 1];
-y = [0 1];
+x = [0 2];
+y = [0 2];
 line(x,y,'Color','red','LineStyle','--')
+
+figure(); 
+hold on;
+histogram((DCa)/max(Ta)-(DCb)/max(Tb),10,'FaceColor','g');
+histogram((UCa)/max(Ta)-(UCb)/max(Tb),10,'FaceColor','m');
+
+XX = DCb-UCb
+[iu(:,1) iu(:,2)] = sort(XX)
+
 
 
     

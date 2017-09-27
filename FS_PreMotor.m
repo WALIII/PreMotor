@@ -17,8 +17,8 @@ elseif nargin > 3
 end
 
 warning off
-%cutoff = 5000; %LNY39
-cutoff = 6700;% lr28
+cutoff = 5000; %LNY39
+%cutoff = 6700;% lr28
  %cutoff = 3500;
 % cutoff = 3000; %LYY
 %cutoff = 4000; %LR33
@@ -102,7 +102,15 @@ for ii = XI2%1: size(song_start,2)
             idx1=song_start(ii); %time in seconds
 
             [~,loc1]= min(abs(roi_ave.interp_time{i}-idx1));
-
+            
+            remainder{counter} = roi_ave.interp_time{i}(loc1)-idx1; % this is the offset
+           
+            roi_ave.interp_time{i}(loc1);
+            
+            % get offset 
+            
+            
+           
             startT{counter} = loc1; % align to this frame
 
 
@@ -235,8 +243,19 @@ disp('catch');
 for cell = 1:size(DATA_D{1},1)%1:size(roi_ave.interp_dff,1)
 for  trial = 1:size(DATA_D,2);
 
-            CAL_start{cell}{trial} = DATA_D{trial}(cell,1:startT{trial} );
-            CAL_end{cell}{trial} = DATA_D{trial}(cell,(startT{trial})+1:end); % add +1 or it will have the same value twice...
+    
+%=======[ shift to new timescale ]========= %
+    
+    
+    old_vec = 1:length(DATA_D{trial}(cell,:));
+    new_vec = old_vec-(remainder{trial}*25);
+    
+   DATA_Ds{trial}(cell,:)=interp1(old_vec,DATA_D{trial}(cell,:),new_vec,'spline');
+     
+    
+    
+            CAL_start{cell}{trial} = DATA_Ds{trial}(cell,1:startT{trial} );
+            CAL_end{cell}{trial} = DATA_Ds{trial}(cell,(startT{trial})+1:end); % add +1 or it will have the same value twice...
 end
 end
 

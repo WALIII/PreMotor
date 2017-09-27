@@ -1,4 +1,4 @@
-function [data iu] = FS_variability(calcium, align,Motif_ind)
+function [data stats] = FS_variability(calcium, align,Motif_ind)
 
 % Get var score: mean( abs [zscore(trace)-zscore(mean)]/zscore(mean);
 
@@ -42,10 +42,12 @@ X2 = squeeze(max(X))
 [B(:,1),B(:,2)] = sort(X2,'descend');
 % Get measurments 
 counter = 1;
-
 counterX = 1;
 
-GG =  B(1:20,2)';
+
+
+
+GG =  B(1:40,2)';
 for i = 1:size(data.directed,1) %trials
 for cell = GG
 % sum of variance
@@ -54,8 +56,8 @@ sVD(:,counter) = sum(abs(((data.directed(i,range2,cell)-mean(data.directed(:,ran
 mVD(:,counter) = mean(abs(((data.directed(i,range2,cell)-mean(data.directed(:,range2,cell),1)))));% Variance
 % Prominance
 try
-[pks,locs,w,p] = findpeaks(data.directed(i,range2,cell),'MinPeakProminence',1.5); %MaxPeakWidth'
-[mp id] = max(pks);
+[pks,locs,w,p] = findpeaks(data.directed(i,range2,cell),'MinPeakProminence',2); %MaxPeakWidth'
+[mp id] = max(p);
 for ii = size(p)
 pVD(:,counterX) = p(ii);
 counterX = counterX+1;
@@ -89,11 +91,11 @@ mVU(:,counter) = mean(abs(((data.undirected(i,range2,cell)-mean(data.all(:,range
 
 % Prominance
 try
-[pks,locs,w,p] = findpeaks(data.undirected(i,range2,cell),'MinPeakProminence',1.5); %MaxPeakWidth'
-[mp id] = max(pks);
+[pks,locs,w,p] = findpeaks(data.undirected(i,range2,cell),'MinPeakProminence',2); %MaxPeakWidth'
+[mp id] = max(p);
 
 for ii = size(p)
-pVU(:,counterX) = p(ii);
+pVU(:,counterX) = p;
 counterX = counterX+1;
 end
 catch
@@ -113,50 +115,31 @@ end
 
 
 % VD(2,counter) = % Power
-figure();
-for cell = 1;
-hold on;
-figure(1);
-G{1} = data.undirected(:,:,cell)';
-G{2} = data.directed(:,:,cell)';
-scrapPlot(G);
-pause(0.1);
-hold off;
-end
-
-
-figure();
-hold on;
-h1 = histogram(pVD,'FaceColor','g')
-h2 = histogram(pVU,'FaceColor','m')
-h1.Normalization = 'probability';
-h1.BinWidth = 0.4;
-h2.Normalization = 'probability';
-h2.BinWidth = 0.4;
-
 % figure();
+% for cell = 1;
 % hold on;
-% h1 = histogram(pdVD,'FaceColor','g')
-% h2 = histogram(pdVU,'FaceColor','m')
-% h1.Normalization = 'probability';
-% h1.BinWidth = 0.1;
-% h2.Normalization = 'probability';
-% h2.BinWidth = 0.1;
+% figure(1);
+% G{1} = data.undirected(:,:,cell)';
+% G{2} = data.directed(:,:,cell)';
+% scrapPlot(G);
+% pause(0.1);
+% hold off;
+% end
+
 
 figure();
- subplot(1,2,1)
-imagesc(cov(squeeze(std(data.directed,[],1)))); colorbar
- subplot(1,2,2)
-imagesc(cov(squeeze(std(data.undirected,[],1)))); colorbar
+hold on;
+h2 = histogram(pVU,'FaceColor','m')
+h1 = histogram(pVD,'FaceColor','g')
+h1.Normalization = 'probability';
+h1.BinWidth = 0.2;
+h2.Normalization = 'probability';
+h2.BinWidth = 0.2;
 
 
 
 
-% Mean prominance:
-
-%figure(); imagesc(cov(squeeze(var(data.directed,[],1)))); colorbar
-
-% for cell = 1:50;
+% Plot amplitude Differences
 
     X = (mean(data.directed(:,:,:),1));
     X2 = squeeze(max(X)-min(X))
@@ -165,15 +148,19 @@ imagesc(cov(squeeze(std(data.undirected,[],1)))); colorbar
     
     X = (mean(data.undirected(:,:,:),1));
     X2 = squeeze(max(X)-min(X))
-    
     UCa = X2;
     
     figure();
+    title('difference in amp')
     hold on;
     scatter(UCa,DCa);
    x = [0 9];
 y = [0 9];
 line(x,y,'Color','red','LineStyle','--')
+
+
+
+
 
    Tx = (std(data.all(:,:,:),[], 1));
     X =  (std(data.directed(:,:,:),[], 1));
@@ -199,31 +186,25 @@ Tb = cat(1,UCb,DCb);
 
 
 
-    figure();
-    title('comparison')
-    hold on;
-%     scatter((UCa)/max(Ta),(DCb)/max(Tb),'r');
-%     scatter((UCb)/max(Tb),(DCa)/max(Ta),'b');
-    
-    scatter((DCa)/max(Ta),(DCb)/max(Tb),'g');
-    scatter((UCa)/max(Ta),(UCb)/max(Tb),'m');
-x = [0 2];
-y = [0 2];
-line(x,y,'Color','red','LineStyle','--')
-
-figure(); 
-hold on;
-histogram((DCa)/max(Ta)-(DCb)/max(Tb),10,'FaceColor','g');
-histogram((UCa)/max(Ta)-(UCb)/max(Tb),10,'FaceColor','m');
-
-XX = DCb-UCb
-[iu(:,1) iu(:,2)] = sort(XX)
+%     figure();
+%     title('comparison')
+%     hold on;
+%     scatter((DCa)/max(Ta),(DCb)/max(Tb),'g');
+%     scatter((UCa)/max(Ta),(UCb)/max(Tb),'m');
+% x = [0 2];
+% y = [0 2];
+% line(x,y,'Color','red','LineStyle','--')
 
 
 
-    
+% figure(); 
+% hold on;
+% histogram((DCa)/max(Ta)-(DCb)/max(Tb),10,'FaceColor','g');
+% histogram((UCa)/max(Ta)-(UCb)/max(Tb),10,'FaceColor','m');
+% 
+% XX = DCb-UCb
+% [iu(:,1) iu(:,2)] = sort(XX)
 
-varout = 0;
 
 
 

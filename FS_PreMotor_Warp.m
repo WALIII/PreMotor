@@ -1,4 +1,4 @@
-function [WARPED_TIME, WARPED_audio, Index] = FS_PreMotor_Warp(WAVcell,template)
+function [WARPED_TIME, WARPED_audio, Index,startT,endT] = FS_PreMotor_Warp(WAVcell,template)
 % FS_warp_song.m
 
 % For getting info on dynamic time warping of song data.
@@ -41,9 +41,13 @@ for i = 1:size(WAVcell{ii},2);
 % GG2_d(counter,:) = diff(GG_d); % Take the derivative of the vector, to get moments of change
    counter = counter+1;
 Index{ii}(i,1) = i;
+startT{ii}(i,1) = song_start;
+endT{ii}(i,1) = song_end;
 catch
     disp('Pass')
 Index{ii}(i,1) = 0;
+startT{ii}(i,1) = 0;
+endT{ii}(i,1) = 0;
 end;
 end
 counter = 1;

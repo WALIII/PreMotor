@@ -17,11 +17,13 @@ elseif nargin > 3
 end
 
 warning off
-%cutoff = 5000; %LNY39
-cutoff = 6700;% lr28
+cutoff = 5000; %LNY39
+%cutoff = 6700;% lr28
  %cutoff = 3500;
-% cutoff = 3000; %LYY
+ %cutoff = 3200; %LYY
 %cutoff = 4000; %LR33
+% cutoff = 5000% LR77
+%cutoff = 7200% LR5lblk60
 counter = 1;
 
 for i = 1:size((roi_ave.analogIO_dat),2)

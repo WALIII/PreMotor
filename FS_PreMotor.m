@@ -157,10 +157,10 @@ for ii = XI2%1: size(song_start,2)
 % padding, check for when LED turns on, and replace these!
 iii;
     if cell == 1; for ivi = flip(2:30); % only on the first cell for each trial
-           
+          if ivi ==2; chk = ivi; break; end; % in case LED was allways on;
+
          if abs(mean(DATA_D{counter}(cell,ivi))- mean(DATA_D{counter}(cell,ivi-1))) < 10
           continue
-          if ivi ==2; chk = ivi; break; end; % in case LED was allways on;
         else
          chk = ivi;
             break;

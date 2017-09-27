@@ -47,7 +47,7 @@ counterX = 1;
 
 
 
-GG =  B(1:20,2)';
+GG =  B(1:10,2)';
 for i = 1:size(data.directed,1) %trials
 for cell = GG
 % sum of variance
@@ -58,6 +58,7 @@ mVD(:,counter) = mean(abs(((data.directed(i,range2,cell)-mean(data.directed(:,ra
 try
 [pks,locs,w,p] = findpeaks(data.directed(i,range2,cell),'MinPeakProminence',2); %MaxPeakWidth'
 [mp id] = max(p);
+
 for ii = size(p)
 pVD(:,counterX) = max(data.directed(i,range2,cell)-min(data.directed(i,range2,cell)));
 
@@ -133,9 +134,9 @@ hold on;
 h2 = histogram(pVU,'FaceColor','m')
 h1 = histogram(pVD,'FaceColor','g')
 h1.Normalization = 'probability';
-h1.BinWidth = 0.5;
+h1.BinWidth = 0.75;
 h2.Normalization = 'probability';
-h2.BinWidth = 0.5;
+h2.BinWidth = 0.75;
 
 
 

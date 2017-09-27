@@ -17,8 +17,8 @@ elseif nargin > 3
 end
 
 warning off
-cutoff = 5000; %LNY39
-%cutoff = 6700;% lr28
+%cutoff = 5000; %LNY39
+cutoff = 6700;% lr28
  %cutoff = 3500;
 % cutoff = 3000; %LYY
 %cutoff = 4000; %LR33

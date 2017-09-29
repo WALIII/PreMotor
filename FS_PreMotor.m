@@ -4,7 +4,7 @@ function [calcium, DATA_D, song_r, song, align, Motif_ind, BGD] =  FS_PreMotor(r
 % detected song
 
 % 05.26.17
-% 09.24.17
+% 09.28.17 % add linear time warping
 % WAL3
 
 if nargin < 3
@@ -17,13 +17,13 @@ elseif nargin > 3
 end
 
 warning off
-cutoff = 5000; %LNY39
-%cutoff = 6700;% lr28
- %cutoff = 3500;
- %cutoff = 3200; %LYY
-%cutoff = 4000; %LR33
+%cutoff = 5000; %LNY39
+% cutoff = 6700;% lr28
+% cutoff = 3500;
+% cutoff = 3200; %LYY
+% cutoff = 4000; %LR33
 % cutoff = 5000% LR77
-%cutoff = 7200% LR5lblk60
+cutoff = 7200% LR5lblk60
 counter = 1;
 
 for i = 1:size((roi_ave.analogIO_dat),2)
@@ -42,6 +42,7 @@ for iii = 1:size(score_d,2);
 score_d;
     if score_d(iii)>cutoff
         song_start(iii) = 0;
+        song_end(iii) = 0;
         score_d(iii) = 0;
 %         continue
     else
@@ -49,6 +50,7 @@ score_d;
     end
 end
 song_start( song_start==0 )=[];
+song_end( song_start==0 )=[];
 score_d( score_d==0 )=[];
 
 
@@ -114,7 +116,9 @@ for ii = XI2%1: size(song_start,2)
             
            
             startT{counter} = loc1; % align to this frame
-
+            % save these for time warping later...
+           start_time{1}(counter) = song_start(ii);
+           end_time{1}(counter) = song_end(ii);
 
             g = zftftb_rms(roi_ave.analogIO_dat{i}(idx1*fs:end),48000);
             g2 = zftftb_rms(roi_ave.analogIO_dat{i}(1:idx1*fs),48000);
@@ -157,7 +161,7 @@ for ii = XI2%1: size(song_start,2)
 % padding, check for when LED turns on, and replace these!
 iii;
     if cell == 1; for ivi = flip(2:30); % only on the first cell for each trial
-          if ivi ==2; chk = ivi; break; end; % in case LED was allways on;
+          if ivi ==2; chk = 12; break; end; % in case LED was allways on;
 
          if abs(mean(DATA_D{counter}(cell,ivi))- mean(DATA_D{counter}(cell,ivi-1))) < 10
           continue
@@ -334,6 +338,10 @@ clear song;
 song = song_all;
 figure(); histogram(score_T,20);
 
+% clean up calcium
+
+Wcalcium = streatch_calcium2(calcium,align,start_time,end_time);
+calcium = Wcalcium;
 end
 % end
 

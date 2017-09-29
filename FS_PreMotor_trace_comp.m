@@ -14,7 +14,7 @@ G = calcium{cell};
  %16 23 25 41 4
  %10 11 14 15 19 26 36 37 48 49
 
-data = tsmovavg(G(:,1:end),'s',4);
+data = tsmovavg(G(:,1:end),'s',2);
 data(:,1:4) = 0;
 % data = zscore(data');
 

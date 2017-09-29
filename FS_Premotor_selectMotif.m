@@ -1,11 +1,11 @@
-function [Syl, indX] =  FS_Premotor_selectMotif(WARPED_audio,WARPED_TIME,indX)
+function [Syl, indX] =  FS_Premotor_selectMotif(WARPED_audio_d,WARPED_TIME_d,indX)
 
 % For motif analysis, select motifs, and get sylable data
 
 sp = 0;
 if nargin < 3
 
-[C,F,T,IMAGE1] = FS_Premotor_AvgSpectrogram(WARPED_audio{1}',1,0.51);
+[C,F,T,IMAGE1] = FS_Premotor_AvgSpectrogram(WARPED_audio_d',1,0.51);
 
 prompt = 'How many syllables are there?';
 x = input(prompt)
@@ -26,34 +26,23 @@ indX{i} = rect;
     end
 
 % Cut out sylabe
-for iii = 1:size(WARPED_audio,2) % For all motif types
-
-     
-for ii = 1:size(WARPED_audio{iii},2)% for all trials
-Syl{i}.audio_data{iii}(:,ii) = WARPED_audio{iii}(rect(1)*48000:(rect(3)+rect(1))*48000,ii);
-  % Calculate difference Vector
-  GG = diff(WARPED_TIME{iii}{ii}(1,:)-WARPED_TIME{iii}{ii}(2,:));
-  nn = 50;
-  DiffVector = tsmovavg(abs(GG),'s',nn);
-  DiffVector(isnan(DiffVector)) = 0;
-  clear GG;
-  
-[cw{1} index{1}] = min(abs(WARPED_TIME{iii}{ii}(1,:)-rect(1)))
-[cw{2} index{2}] = min(abs(WARPED_TIME{iii}{ii}(1,:)-(rect(3)+rect(1))))
+for ii = 1:size(WARPED_audio_d,2)% for all trials
+Syl{i}.audio_data(:,ii) = WARPED_audio_d(rect(1)*48000:(rect(3)+rect(1))*48000,ii);
 
 
 
+[cw{1} index{1}] = min(abs(WARPED_TIME_d{ii}(1,:)-rect(1)))
+[cw{2} index{2}] = min(abs(WARPED_TIME_d{ii}(1,:)-(rect(3)+rect(1))))
 
+% CV{1} = WARPED_TIME_d{ii}(1,index{1}); % start
+% CV{2} = WARPED_TIME_d{ii}(1,index{2}); % end
 
 try
-Syl{i}.audio_time{iii}{ii} = WARPED_TIME{iii}{ii}(:,index{1}:index{2}); % send both vectors
-Syl{i}.audio_dff{iii}(:,ii) = DiffVector(:,index{1}:index{2});
-
+Syl{i}.audio_time{ii} = WARPED_TIME_d{ii}(:,index{1}:index{2}); % send both vectors
 catch
     disp('&')
 end
 
-end
 end
 end
 
@@ -67,27 +56,21 @@ prompt = 'Do you want more? y/n : ';
 str = input(prompt,'s');
 if str== 'y'
     % Calculate SDIs for the entire song
-
-    for iii = 1:size(WARPED_audio,2) % For all motif types
-[Gconsensus,F,T] = CY_Get_Consensus(WARPED_audio{iii});
+[Gconsensus,F,T] = CY_Get_Consensus(mic_data);
 
 % Break up motif SDI information:
-for i = 1:x; % for all motifs,
+    for i = 1:x; % for all motifs,
         rect = indX{i};
         % Get index data
-        %cvrsn = ??; % conversion from units of T to time
-[cw{1} index{1}] = min(abs(T-rect(1)));
-[cw{2} index{2}] = min(abs(T-(rect(3)+rect(1))));
+        cvrsn = ??; % conversion from units of T to time
+[cw{1} index{1}] = min(abs(T-rect(1)/cvrsn));
+[cw{2} index{2}] = min(abs(T-(rect(3)+rect(1))/cvrsn));
 
-for ii = 1:size(WARPED_audio{iii},2)
-Syl{i}.SDI{iii}{ii} = Gconsensus{1}(:,index{1}:index{2},ii);
+for ii = 1:size(WARPED_audio_d,2)
+Syl{i}.SDI{ii} = Gconsensus{1}(:,index{1}:index{2},ii);
 end
-
-% calculate SIM score
-[Syl{i}.sim_score{iii}, Syl{i}.vector_score{iii}] = FS_song_dff(Syl{i}.SDI{iii});
     end
-  end
 
 else
-    disp('nope, not today...')
+    disp('nope, not to...')
 end

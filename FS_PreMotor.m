@@ -18,12 +18,12 @@ end
 
 warning off
 % cutoff = 5000; %LNY39
- cutoff = 6700;% lr28
+% cutoff = 6700;% lr28
 % cutoff = 3500;
 % cutoff = 3200; %LYY
 % cutoff = 4000; %LR33
 % cutoff = 5000% LR77
-% cutoff = 7200% LR5lblk60
+ cutoff = 7200% LR5lblk60
 counter = 1;
 
 for i = 1:size((roi_ave.analogIO_dat),2)
@@ -49,8 +49,8 @@ score_d;
 
     end
 end
-song_start( song_start==0 )=[];
 song_end( song_start==0 )=[];
+song_start( song_start==0 )=[];
 score_d( score_d==0 )=[];
 
 

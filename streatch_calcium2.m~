@@ -15,11 +15,11 @@ for trial = 1:size(startT{1}',1)
 
 
 
-NG = (0:(1/25):1); % want to be even
-OG = (NG./ G(1,trial)); % original was compressed, like this % 1 = longest, unchaged. 0.5 = most streatched.
+OG = (0:(1/25):1); % want to be even
+NG = (OG + (1-G(1,trial))); % original was compressed, like this % 1 = longest, unchaged. 0.5 = most streatched.
 %offset
  %NG = NG+ (max(OG) - max(NG))/2; 
-NG = NG- (mean(OG) - mean(NG)); % apply streatches to begining
+NG = NG- (max(OG) - max(NG)); % apply streatches to begining
 
 
 
@@ -51,7 +51,7 @@ close all
 
 figure()
 % Works
-cells = 5;
+cells = 6;
 subplot(121)
 hold on;
 imagesc(ct_vect(:,:,cells));

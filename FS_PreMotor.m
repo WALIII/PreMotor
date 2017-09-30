@@ -340,8 +340,8 @@ figure(); histogram(score_T,20);
 
 % clean up calcium
 
-%Wcalcium = streatch_calcium2(calcium,align,start_time,end_time);
-%calcium = Wcalcium;
+Wcalcium = streatch_calcium2(calcium,align,start_time,end_time);
+calcium = Wcalcium;
 end
 % end
 

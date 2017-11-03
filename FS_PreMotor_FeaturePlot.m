@@ -1,4 +1,4 @@
-function [sim_score, vector_score, A_diff,S_diff, time_score] = FS_PreMotor_FeaturePlot(WARPED_TIME,WARPED_audio,Gconsensus,vargin)
+function [sim_score, vector_score, A_diff,S_diff, time_score] = FS_PreMotor_FeaturePlot(WARPED_TIME,WARPED_audio,Gconsensus,c_agg)
   % plot traces that correspond to warping locations
   % d050117
   % WAL3
@@ -12,8 +12,9 @@ function [sim_score, vector_score, A_diff,S_diff, time_score] = FS_PreMotor_Feat
   else
       c_agg = cat(3,c_agg,Gconsensus{1,i}{1});
    end
-   end
-
+  end
+  end
+   
   % Get Spectral information from adjusted audio
   for i = 1:size(WARPED_audio,2)
   [sim_score{i}, vector_score{i}] = FS_song_dff(Gconsensus{1,i}{1},c_agg);

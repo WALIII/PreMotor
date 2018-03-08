@@ -1,4 +1,4 @@
-function [WARPED_TIME, WARPED_audio, Index,startT,endT] = FS_PreMotor_Warp(WAVcell,template)
+function [WARPED_TIME, WARPED_audio, Index,startT,endT,WARPED_audio_buffer] = FS_PreMotor_Warp(WAVcell,template)
 % FS_warp_song.m
 
 % For getting info on dynamic time warping of song data.
@@ -37,6 +37,15 @@ for i = 1:size(WAVcell{ii},2);
     try
 [song_start, song_end, score_d(counter,:)] = find_audio(WAVcell{ii}{i}, template, fs, 'match_single', true,'constrain_length', 0.25);
 [WARPED_TIME{ii}{counter} WARPED_audio{ii}(:,counter)]  = warp_audio(WAVcell{ii}{i}(song_start*fs:song_end*fs,:), template, fs,[]);
+
+% [OPTIONAL] Add on before and after sections 
+sT = WAVcell{ii}{i}((song_start*fs)-40000:(song_start*fs));
+eT = WAVcell{ii}{i}((song_end*fs):(song_end*fs)+40000);
+G =  WARPED_audio{ii}(:,counter);
+WARPED_audio_buffer{ii}(:,counter) = cat(1,sT,G,eT);
+
+
+
 % GG_d = WARPED_TIME_d{counter}(1,:)-WARPED_TIME_d{counter}(2,:); %differences in timing
 % GG2_d(counter,:) = diff(GG_d); % Take the derivative of the vector, to get moments of change
    counter = counter+1;

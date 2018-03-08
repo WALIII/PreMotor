@@ -41,7 +41,7 @@ disp('Formatting data')
 for cell = 1:size(calcium,2);
   for trial = 1:size(calcium{cell},1);
         temp = detrend(smooth(calcium{cell}(trial,range)));
-        data.unsorted(trialb,:,cell) = cat(1,temp(:,1:end),Motif_ind(3,trial)*5);
+        data.unsorted(trialb,:,cell) = temp(:,1:end);
         trialb = trialb+1;
             
   end

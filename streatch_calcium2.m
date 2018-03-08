@@ -1,6 +1,6 @@
 
 
-function Wcalcium = streatch_calcium2(calcium,align,startT,endT)
+function [Wcalcium, stretch] = streatch_calcium2(calcium,align,startT,endT)
 
 % onset = 5;
 % endset = 5;
@@ -21,7 +21,8 @@ OG = (NG./ G(1,trial)); % original was compressed, like this % 1 = longest, unch
  %NG = NG+ (max(OG) - max(NG))/2; 
 NG = NG- (mean(OG) - mean(NG)); % apply streatches to begining
 
-
+stretch{trial}.Old = NG;
+stretch{trial}.New = OG;
 
 
 

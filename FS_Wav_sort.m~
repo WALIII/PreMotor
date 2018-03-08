@@ -28,7 +28,11 @@ for i = C_only
 WAV_o{counter} = song_r(i,((A_1{2})/25-sT)*48000:(A_1{2}/25+eT)*48000)';
 counter= counter+1;
 end
-try WAVcell{2} = WAV_o; catch;  WAVcell{2} = 0; end;
+try
+WAVcell{2} = WAV_o;
+catch
+    WAVcell{2} = 0;
+end
  
 counter = 1;
 for i = C_last

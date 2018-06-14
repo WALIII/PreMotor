@@ -7,6 +7,8 @@ function [calcium, DATA_D, song_r, song, align, Motif_ind, BGD, stretch] =  FS_P
 % 09.28.17 % add linear time warping
 % WAL3
 
+disp(' Make sure you set the threshold correctly!');
+
 if nargin < 3
 directed = 0;
 undirected = 0;
@@ -17,11 +19,11 @@ elseif nargin > 3
 end
 
 warning off
-% cutoff = 5000; %LNY39
+ cutoff = 5000; %LNY39
 % cutoff = 6700;% lr28
 % cutoff = 3500;
 % cutoff = 3200; %LYY
- cutoff = 4000; %LR33
+ % cutoff = 4000; %LR33
 % cutoff = 5000% LR77
 % cutoff = 7200% LR5lblk60
 counter = 1;

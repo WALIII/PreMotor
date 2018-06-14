@@ -4,7 +4,7 @@ function [data] = FS_Data(calcium,align,Motif_ind,mm,mp)
 % Make matrixes
 triala = 1;
 trialb = 1;
-Smh = 4;
+Smh = 3;
 range = align-mm:align+mp;
 % range2 = 1:30;
 
@@ -41,7 +41,9 @@ disp('Formatting data')
 for cell = 1:size(calcium,2);
   for trial = 1:size(calcium{cell},1);
         temp = detrend(smooth(calcium{cell}(trial,range)));
+        
         data.unsorted(trialb,:,cell) = temp(:,1:end);
+        data.raw_unsorted(trialb,:,cell) = calcium{cell}(trial,range); 
         trialb = trialb+1;
             
   end

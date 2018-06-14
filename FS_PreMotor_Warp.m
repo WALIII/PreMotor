@@ -39,8 +39,8 @@ for i = 1:size(WAVcell{ii},2);
 [WARPED_TIME{ii}{counter} WARPED_audio{ii}(:,counter)]  = warp_audio(WAVcell{ii}{i}(song_start*fs:song_end*fs,:), template, fs,[]);
 
 % [OPTIONAL] Add on before and after sections 
-sT = WAVcell{ii}{i}((song_start*fs)-40000:(song_start*fs));
-eT = WAVcell{ii}{i}((song_end*fs):(song_end*fs)+40000);
+sT = WAVcell{ii}{i}((song_start*fs)-400:(song_start*fs));
+eT = WAVcell{ii}{i}((song_end*fs):(song_end*fs)+400);
 G =  WARPED_audio{ii}(:,counter);
 WARPED_audio_buffer{ii}(:,counter) = cat(1,sT,G,eT);
 

@@ -26,6 +26,8 @@ warning off
  % cutoff = 4000; %LR33
 % cutoff = 5000% LR77
 % cutoff = 7200% LR5lblk60
+%cutoff = 2*10e3% lny13
+% cutoff = 3.9*10e3; % lny18
 counter = 1;
 
 for i = 1:size((roi_ave.analogIO_dat),2)
@@ -150,7 +152,7 @@ for ii = XI2%1: size(song_start,2)
             BGD.Bgnd{counter} = roi_ave.Bgnd{trial};
             BGD.index{counter} = Motif_ind(3,counter);
             
-            DATA_D{counter}(cell,:) =  (roi_ave.interp_raw{cell,trial}) -roi_ave.Npil{trial}+ (roi_ave.Npil{trial}(30));
+            DATA_D{counter}(cell,:) =  (roi_ave.interp_raw{cell,trial});% -roi_ave.Npil{trial}+ (roi_ave.Npil{trial}(30));
                 catch
                     if trial ==1;
                   disp('Warning: Not correcting for neuropil')
@@ -343,16 +345,8 @@ figure(); histogram(score_T,20);
 % clean up calcium
 
 disp ( 'no warping...');
-[Wcalcium, stretch]= streatch_calcium2(calcium,align,start_time,end_time);
+%[Wcalcium, stretch]= streatch_calcium2(calcium,align,start_time,end_time);
 % calcium = Wcalcium;
 end
 % end
 
-
-
-% index into calcium data
-
-
-% add zeros to padd everything imaging data
-
-%

@@ -1,4 +1,4 @@
-function [song, song_r, align,Motif_ind]= FS_Premotor_WavSort(WAV,TEMPLATE,cutoff)
+function [song, song_r, align,Motif_ind]= FS_Premotor_WavSort(WAV,TEMPLATE,fs,cutoff)
 % input wav files, export sorted WAVs for figure one of Context paper
 % Eventually integrate as a subfunction of FS_Premotor.m
 
@@ -15,12 +15,12 @@ function [song, song_r, align,Motif_ind]= FS_Premotor_WavSort(WAV,TEMPLATE,cutof
 % d06.08.17
 % d09/19/17
 
-if nargin < 3
+if nargin < 4
 cutoff = 7300;
 end
 
 % Initial Params:
-fs = 48000;
+% fs = 48000;
 counter = 1;
 
 
@@ -105,8 +105,8 @@ for ii = XI2%1: size(song_start,2)
             [~,loc1]= min(abs(time{i}-idx1));        
             startT{counter} = loc1; % align to this frame
               
-            g = zftftb_rms(WAV{i}(idx1*fs:end),48000);
-            g2 = zftftb_rms(WAV{i}(1:idx1*fs),48000);
+            g = zftftb_rms(WAV{i}(idx1*fs:end),fs);
+            g2 = zftftb_rms(WAV{i}(1:idx1*fs),fs);
             song{counter} = zscore(g');
             song2{counter} = zscore(g2');
             song_r1{counter} = WAV{i}(idx1*fs:end)';

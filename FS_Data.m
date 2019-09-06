@@ -44,7 +44,7 @@ disp('Formatting data')
 for cell = 1:size(calcium,2);
   for trial = 1:size(calcium{cell},1);
         temp = detrend(smooth(calcium{cell}(trial,range)));
-        
+        temp(1:Smh,:) = [];
         data.unsorted(trialb,:,cell) = temp(:,1:end);
         data.raw_unsorted(trialb,:,cell) = calcium{cell}(trial,range); 
         trialb = trialb+1;
